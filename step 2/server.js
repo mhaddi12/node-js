@@ -1,13 +1,82 @@
-// const fs = require("fs");
-// const os = require("os");
-require("../step 2/file");
-const _ = require("lodash");
+// const fs = require('fs');
 
-// var user = os.userInfo();
-// console.log(user.username);
-// fs.appendFile("file.txt", " HI " + user.username + "!\n", () => {
-//   console.log("File is Created");
+// // Asynchronous File Reading
+// console.log("Start");
+// fs.readFile('file.txt', 'utf8', (err, data) => {
+//   if (err) throw err;
+//   console.log(data); // Executes when file is read
 // });
-const array = [1, 2, 3, 4, 54, 12, 3, 1, 3];
+// console.log("End");
 
-console.log(_.uniq(array));
+// console.log("Start");
+
+// setTimeout(() => {
+//   console.log("Timeout callback");
+// }, 1000);
+
+// console.log("End");
+
+// makePromisive = () => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       //console.log();
+//       resolve("Timeout callback");
+//     }, 1000);
+//   });
+// };
+// console.log("Start");
+// makePromisive().then((data) => {
+//   console.log(data);
+// });
+// console.log("End");
+
+// makePromisive = () => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       //console.log();
+//       resolve("Timeout callback");
+//     }, 1000);
+//   });
+// };
+
+// const main = async () => {
+//   console.log("Start");
+//   const data = await makePromisive();
+//   console.log(data);
+//   console.log("End");
+// };
+
+// main();
+//ES6 Syntax
+
+// const myPromise = new Promise((resolve, reject) => {
+//   let success = false;
+//   if (success) {
+//     resolve("Success");
+//   } else {
+//     reject("Fail");
+//   }
+// });
+
+// myPromise
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+const fetch = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Database is Connected");
+    }, 1000);
+  });
+};
+
+fetch()
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
