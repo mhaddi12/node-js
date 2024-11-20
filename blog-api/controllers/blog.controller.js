@@ -1,10 +1,16 @@
 const Blog = require("../model/blog.model");
 const User = require("../model/user.model");
+const { uploadToCloudinary } = require("../middleware/upload");
+const path = require("path");
 
 exports.createBlog = async (req, res) => {
-  const { title, description, image, userId } = req.body;
-
+  const { title, description, userId } = req.body;
+  const filename = Date.now() + path.extname(req.file.originalname);
   try {
+    const cloudinaryResult = await uploadToCloudinary(
+      req.file.buffer,
+      filename
+    );
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ error: "User not found" });
@@ -13,7 +19,7 @@ exports.createBlog = async (req, res) => {
     const newBlog = new Blog({
       title,
       description,
-      image,
+      image: cloudinaryResult.secure_url,
       userId: existingUser._id,
     });
 
@@ -49,7 +55,6 @@ exports.getBlogById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 exports.updateBlog = async (req, res) => {
   const blogId = req.params.id;

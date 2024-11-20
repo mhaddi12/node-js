@@ -9,6 +9,7 @@ const {
 } = require("../controllers/blog.controller.js");
 
 const { authenticateToken } = require("../middleware/middleware.js");
+const { upload } = require("../middleware/upload");
 
 const {
   registerUser,
@@ -17,7 +18,7 @@ const {
 } = require("../controllers/user.controller.js");
 
 //blog routes
-router.post("/", authenticateToken, createBlog);
+router.post("/", upload.single("image"), authenticateToken, createBlog);
 router.get("/post", getBlogs);
 router.get("/post/:id", getBlogById);
 router.put("/post/:id", authenticateToken, updateBlog);
