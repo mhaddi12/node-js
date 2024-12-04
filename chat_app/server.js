@@ -1,9 +1,12 @@
-const express = require("express");
-const connectDB = require("./configs/db");
-require("dotenv").config();
-const router = require("./routes/router");
+import express from "express";
+import connectDB from "./configs/db.js";
+import router from "./routes/router.js";
+
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const app = express();
-const token = require("./middlewares/token");
 
 // Connect to the database
 connectDB();

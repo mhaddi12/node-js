@@ -1,7 +1,7 @@
-const User = require("../models/user.model");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+import User from "../models/user.model.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 let otpStore = {}; // Temporary in-memory store for OTPs (use DB in production)
 
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Helper function to send emails
-async function sendEmail(toEmail, subject, textContent, htmlContent) {
+const sendEmail = async (toEmail, subject, textContent, htmlContent) => {
   const mailOptions = {
     from: `"Game Support" <${process.env.EMAIL}>`,
     to: toEmail,
@@ -31,15 +31,13 @@ async function sendEmail(toEmail, subject, textContent, htmlContent) {
     console.error("Error sending email:", error.message);
     throw error;
   }
-}
+};
 
 // Generate a 6-digit OTP
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000);
-}
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
 
 // Register a new user
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -89,8 +87,6 @@ exports.registerUser = async (req, res) => {
 
     await sendEmail(email, subject, textContent, htmlContent);
 
-    // Create and save the user
-
     res.status(200).json({
       status: "success",
       message: "OTP sent successfully. Please verify your email.",
@@ -105,7 +101,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // Login a user
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -154,7 +150,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // Fetch all users
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.status(200).json({
@@ -171,7 +167,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Forgot Password
-exports.forgetPassword = async (req, res) => {
+export const forgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -220,7 +216,7 @@ exports.forgetPassword = async (req, res) => {
   }
 };
 
-exports.verifyOtp = async (req, res) => {
+export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
@@ -281,54 +277,3 @@ exports.verifyOtp = async (req, res) => {
     });
   }
 };
-
-// Verify OTP
-// exports.verifyOtp = async (req, res) => {
-//   try {
-//     const { email, otp } = req.body;
-
-//     // Validate input
-//     if (!email || !otp) {
-//       return res.status(400).json({
-//         status: "fail",
-//         message: "Email and OTP are required.",
-//       });
-//     }
-
-//     const otpData = otpStore[email];
-//     if (!otpData) {
-//       return res.status(400).json({
-//         status: "fail",
-//         message: "Invalid or expired OTP.",
-//       });
-//     }
-
-//     if (Date.now() > otpData.expiresAt) {
-//       delete otpStore[email];
-//       return res.status(400).json({
-//         status: "fail",
-//         message: "OTP has expired.",
-//       });
-//     }
-
-//     const isOtpValid = await bcrypt.compare(otp.toString(), otpData.hashedOtp);
-//     if (!isOtpValid) {
-//       return res.status(400).json({
-//         status: "fail",
-//         message: "Invalid OTP.",
-//       });
-//     }
-
-//     delete otpStore[email]; // Cleanup after successful verification
-//     res.status(200).json({
-//       status: "success",
-//       message: "OTP verified successfully.",
-//     });
-//   } catch (error) {
-//     console.error("Error verifying OTP:", error.message);
-//     res.status(500).json({
-//       status: "error",
-//       message: "An error occurred while verifying OTP.",
-//     });
-//   }
-// };
