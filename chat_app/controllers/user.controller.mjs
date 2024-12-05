@@ -2,6 +2,7 @@ import User from "../models/user.model.mjs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import otpModel from "../models/otp.model.mjs";
 
 let otpStore = {}; // Temporary in-memory store for OTPs (use DB in production)
 
@@ -62,13 +63,19 @@ export const registerUser = async (req, res) => {
     const otp = generateOTP();
     const salt = await bcrypt.genSalt(10);
     const hashedOtp = await bcrypt.hash(otp.toString(), salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    otpStore[email] = {
-      name,
-      password,
-      hashedOtp,
-      expiresAt: Date.now() + 5 * 60 * 1000,
-    };
+    await otpModel.findOneAndUpdate(
+      { email },
+      {
+        email,
+        password: hashedPassword,
+        name,
+        hashedOtp,
+        expiresAt: Date.now() + 5 * 60 * 1000,
+      },
+      { upsert: true, new: true }
+    );
 
     const subject = "Password Reset OTP";
     const textContent = `Your OTP is: ${otp}. It is valid for 5 minutes.`;
@@ -220,14 +227,16 @@ export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
+    // Validate input
     if (!email || !otp) {
       return res.status(400).json({
         status: "fail",
-        message: "Email and OTP are required.",
+        message: "Email, OTP, password, and name are required.",
       });
     }
 
-    const otpData = otpStore[email];
+    // Fetch OTP data from the database
+    const otpData = await otpModel.findOne({ email });
     if (!otpData) {
       return res.status(400).json({
         status: "fail",
@@ -235,14 +244,16 @@ export const verifyOtp = async (req, res) => {
       });
     }
 
-    if (Date.now() > otpData.expiresAt) {
-      delete otpStore[email];
+    // Check if OTP is expired
+    if (Date.now() > new Date(otpData.expiresAt).getTime()) {
+      await otpModel.deleteOne({ email }); // Clean up expired OTP
       return res.status(400).json({
         status: "fail",
         message: "OTP has expired.",
       });
     }
 
+    // Verify OTP
     const isOtpValid = await bcrypt.compare(otp.toString(), otpData.hashedOtp);
     if (!isOtpValid) {
       return res.status(400).json({
@@ -252,18 +263,16 @@ export const verifyOtp = async (req, res) => {
     }
 
     // Save user to the database after successful OTP verification
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(otpData.password, salt);
     const user = new User({
       name: otpData.name,
       email,
-      password: hashedPassword,
+      password: otpData.password,
     });
 
     await user.save();
 
     // Clean up OTP data
-    delete otpStore[email];
+    await otpModel.deleteOne({ email });
 
     res.status(200).json({
       status: "success",
