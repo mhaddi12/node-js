@@ -1,9 +1,9 @@
 {
   "name": "chat_app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.mjs",
   "scripts": {
-    "start": "nodemon -r @babel/register server.js",
+    "start": "nodemon -r @babel/register server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -26,6 +26,5 @@
     "@babel/node": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/register": "^7.10.5"
-  },
-  "type": "module"
+  }
 }
