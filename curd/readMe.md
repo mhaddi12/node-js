@@ -10,7 +10,50 @@ https://node-js-ald0.onrender.com/api
 
 ## Endpoints
 
-### 1. Get All Curds
+### 1. User Registration
+
+**Endpoint:**
+
+```
+POST /register
+```
+
+**Description:** Registers a new user.
+**Example Request:**
+
+```json
+{
+  "username": "exampleUser",
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+### 2. User Login
+
+**Endpoint:**
+
+```
+POST /login
+```
+
+**Localhost:**
+
+```
+http://localhost:5000/api/login
+```
+
+**Description:** Authenticates a user and returns a token.
+**Example Request:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+### 3. Get All Curds
 
 **Endpoint:**
 
@@ -20,7 +63,7 @@ GET /getCurds
 
 **Description:** Retrieves a list of all curds.
 
-### 2. Create Curd
+### 4. Create Curd
 
 **Endpoint:**
 
@@ -38,7 +81,7 @@ POST /createCurd
 }
 ```
 
-### 3. Delete Curd
+### 5. Delete Curd
 
 **Endpoint:**
 
@@ -54,7 +97,7 @@ DELETE /deleteCurd/67a4710763c55bc57745b4d1
 
 **Description:** Deletes a curd entry by ID.
 
-### 4. Update Curd
+### 6. Update Curd
 
 **Endpoint:**
 
@@ -94,7 +137,7 @@ PUT /updateCurd/67a490f4243ec281827c3a2f
    ```
 4. Start the server:
    ```sh
-   npm run dev
+   npm start
    ```
 
 ## Dependencies
@@ -102,8 +145,6 @@ PUT /updateCurd/67a490f4243ec281827c3a2f
 - Node.js
 - Express.js
 - MongoDB
-- nodemon
-- dotenv
 
 ## License
 
