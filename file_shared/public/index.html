@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #007bff, #6610f2);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        #upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="file"] {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        #file-list {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        .file-item {
+            list-style: none;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f1f1f1;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .file-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .file-item:hover {
+            background: #ddd;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📂 File Sharing App</h1>
+
+    <div id="upload-container">
+        <input type="file" id="fileInput">
+        <button id="uploadBtn">Upload & Share 🚀</button>
+    </div>
+
+    <div id="file-list">
+        <h3>📄 Shared Files:</h3>
+        <ul id="files"></ul>
+    </div>
+
+    <script>
+        const socket = io();
+        const fileInput = document.getElementById("fileInput");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const fileList = document.getElementById("files");
+
+        uploadBtn.addEventListener("click", () => {
+            const file = fileInput.files[0];
+            if (!file) return alert("⚠️ Please select a file first!");
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload", { method: "POST", body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("✅ File shared:", data.fileUrl);
+                })
+                .catch(err => console.error("❌ Upload error:", err));
+        });
+
+        socket.on("file-shared", (data) => {
+            const listItem = document.createElement("li");
+            listItem.classList.add("file-item");
+            listItem.innerHTML = `📎 <a href="${data.fileUrl}" target="_blank">${data.filename}</a>`;
+            fileList.appendChild(listItem);
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "node-js",
+  "name": "js",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,13 +8,22 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.4",
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "express": "^4.21.2"
-  }
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhaddi12/node-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mhaddi12/node-js/issues"
+  },
+  "homepage": "https://github.com/mhaddi12/node-js#readme",
+  "description": ""
 }

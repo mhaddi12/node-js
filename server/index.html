@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keyboard Layout</title>
+<style>
+  body {
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+
+  .keyboard {
+    display: grid;
+    grid-template-columns: repeat(15, 60px);
+    gap: 5px;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 12px;
+  }
+
+  .key {
+    background-color: #1f1f1f;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+  }
+
+  .key.wide {
+    grid-column: span 2;
+  }
+
+  .key.extra-wide {
+    grid-column: span 3;
+  }
+
+  .key.highlight {
+    background-color: #00c98d;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+
+<div class="keyboard">
+  <!-- Row 1 -->
+  <div class="key highlight">Win</div>
+  <div class="key">Left Click</div>
+  <div class="key">Left Click</div>
+  <div class="key">B</div>
+  <div class="key">J</div>
+  <div class="key">K</div>
+  <div class="key">J</div>
+  <div class="key">K</div>
+  <div class="key">Left Click</div>
+  <div class="key">Left Click</div>
+  
+  <!-- Row 2 -->
+  <div class="key wide">Fn + 🔊</div>
+  <div class="key">🔇</div>
+  <div class="key">🔉</div>
+  <div class="key">🔊</div>
+  <div class="key">⏪</div>
+  <div class="key">⏹</div>
+  <div class="key">⏯</div>
+  <div class="key">⏩</div>
+  <div class="key">🎵</div>
+  <div class="key">🌐</div>
+  <div class="key">↩</div>
+  <div class="key">↪</div>
+  <div class="key">⟳</div>
+  <div class="key">✖</div>
+  <div class="key">🔍</div>
+
+  <!-- Row 3 -->
+  <div class="key">Esc</div>
+  <div class="key">F1</div>
+  <div class="key">F2</div>
+  <div class="key">F3</div>
+  <div class="key">F4</div>
+  <div class="key">F5</div>
+  <div class="key">F6</div>
+  <div class="key">F7</div>
+  <div class="key">F8</div>
+  <div class="key">F9</div>
+  <div class="key">F10</div>
+  <div class="key">F11</div>
+  <div class="key">F12</div>
+  <div class="key">Prt Sc</div>
+  <div class="key">Scr Lk</div>
+</div>
+
+</body>
+</html>
